@@ -1,0 +1,16 @@
+    <a
+      class="list-group-item clearfix"
+      style="cursor: pointer;"
+    >
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">{{ contact.name }}</h5>
+      </div>
+      <span class="pull-right">
+        <img
+          [src]="contact.imageUrl"
+          alt="{{ contact.name }}"
+          class="img-responsive"
+          style="max-height: 50px;"
+        />
+      </span>
+    </a>
