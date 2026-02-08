@@ -15,5 +15,23 @@
         <a [href]="document.url" target="_blank">{{ document.url }}</a>
       </span>
     </div>
+
+    <div class="label-value" *ngIf="children.length">
+      <div class="list-group">
+        <div class="list-group-item" *ngFor="let child of children">
+          <strong>{{ child.name }}</strong>
+
+          <div *ngIf="child.description">
+            {{ child.description }}
+          </div>
+
+          <div *ngIf="child.url">
+            <a [href]="child.url" target="_blank">{{ child.url }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Message } from '../message.model';
 
+
 @Component({
   selector: 'cms-message-item',
   imports: [],
@@ -9,4 +10,5 @@ import { Message } from '../message.model';
 })
 export class MessageItemComponent {
   @Input() message!: Message;
+
 }

@@ -1,6 +1,10 @@
-<a class="list-group-item clearfix">
-  <div class="">
-    <span class="messageHeader">{{ message.sender }}</span>
-    <div class="messageText">{{ message.msgText }}</div>
+<div class="media">
+  <div class="media-left">
+    <div class="id-badge">{{ message.id }}</div>
   </div>
-</a>
+
+  <div class="media-body">
+    <span class="messageHeader">{{ message.sender }}</span>
+    <p>{{ message.msgText }}</p>
+  </div>
+</div>

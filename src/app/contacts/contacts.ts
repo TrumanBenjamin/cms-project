@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {CommonModule } from '@angular/common';
 import { Contact } from './contact.model';
+import { ContactService } from './contact';
 import { ContactListComponent } from './contact-list/contact-list';
 import { ContactDetailComponent } from './contact-detail/contact-detail';
 
@@ -12,6 +13,14 @@ import { ContactDetailComponent } from './contact-detail/contact-detail';
   templateUrl: './contacts.html',
   styleUrls: ['./contacts.css']
 })
-export class ContactsComponent {
+export class ContactsComponent implements OnInit {
   selectedContact: Contact | null = null;
+
+  constructor(private contactService: ContactService) {}
+
+  ngOnInit(): void {
+    this.contactService.contactSelectedEvent.subscribe((contact: Contact) => {
+      this.selectedContact = contact;
+    });
+  }
 }

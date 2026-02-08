@@ -1,27 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Message } from '../message.model';
+import { MessageService } from '../message';
+
 import { MessageItemComponent } from '../message-item/message-item';
 import { MessageEditComponent } from '../message-edit/message-edit';
 
 @Component({
   selector: 'cms-message-list',
   standalone: true,
-  imports: [
-    CommonModule, 
-    MessageItemComponent, 
-    MessageEditComponent
-  ],
+  imports: [CommonModule, MessageItemComponent, MessageEditComponent],
   templateUrl: './message-list.html',
-  styleUrl: './message-list.css',
+  styleUrls: ['./message-list.css']
 })
-export class MessageListComponent {
-  messages: Message[] = [
-  new Message('1', 'Hello', 'This is the first message', 'Truman'),
-  new Message('2', 'Question', 'Are we still meeting today?', 'Rex'),
-  new Message('3', 'FYI', 'Don’t forget the assignment is due soon', 'Kent')
-];
-  onAddMessage(message: Message) {
-  this.messages.push(message);
-}
+export class MessageListComponent implements OnInit {
+  messages: Message[] = [];
+
+  constructor(private messageService: MessageService) {}
+
+  ngOnInit(): void {
+    this.messages = this.messageService.getMessages();
+
+    this.messageService.messageChangedEvent.subscribe((messages: Message[]) => {
+      this.messages = messages;
+    });
+  }
 }

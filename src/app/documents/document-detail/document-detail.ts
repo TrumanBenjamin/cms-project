@@ -6,8 +6,12 @@ import { Document } from '../document.model'
   selector: 'cms-document-detail',
   imports: [CommonModule],
   templateUrl: './document-detail.html', 
-  styleUrl: './document-detail.css', 
+  styleUrls: ['./document-detail.css'],
 })
 export class DocumentDetailComponent {
-  @Input() document!: Document;
+  @Input() document: Document | null = null;
+
+  get children(): Document[] {
+    return this.document?.children ?? [];
+  }
 }
