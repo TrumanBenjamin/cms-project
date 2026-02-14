@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Document } from '../document.model'
 import { DocumentService } from '../document';
 import { DocumentListComponent } from '../document-list/document-list';
-import { DocumentDetailComponent } from '../document-detail/document-detail';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'cms-documents',
   standalone: true,
   imports: [CommonModule, 
     DocumentListComponent, 
-    DocumentDetailComponent],
+    RouterOutlet],
   templateUrl: './documents.html',
   styleUrls: ['./documents.css'],
 })

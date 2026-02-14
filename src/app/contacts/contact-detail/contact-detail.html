@@ -4,8 +4,8 @@
     <span class="pull-left">Contact Detail</span>
 
     <div class="pull-right">
-      <a class="btn btn-primary btn-sm">Edit</a>
-      <a class="btn btn-danger btn-sm">Delete</a>
+      <a class="btn btn-primary btn-sm" [routerLink]="['edit']">Edit</a>
+      <a class="btn btn-danger btn-sm" (click)="onDelete()">Delete</a> 
     </div>
   </div>
 

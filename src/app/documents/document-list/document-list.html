@@ -1,21 +1,18 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="row pad-left-right">
-      <span class="pull-left title">Add Documents</span>
-      <a class="btn btn-success pull-right">Add Document</a>
+  <div class="panel-heading clearfix">
+    <div class="pull-left">
+      <h4 class="panel-title" style="margin-top: 7px;">Documents</h4>
+    </div>
+
+    <div class="pull-right">
+      <a class="btn btn-success" [routerLink]="['new']">New Document</a>
     </div>
   </div>
 
   <div class="panel-body">
     <div class="row">
-      <div
-        class="col-sm-6 col-md-4"
-        *ngFor="let doc of documents"
-      >
-        <cms-document-item
-          [document]="doc"
-          (documentSelected)="onSelectedDocument($event)">
-        </cms-document-item>
+      <div class="col-sm-6 col-md-4" *ngFor="let doc of documents">
+        <cms-document-item [document]="doc"></cms-document-item>
       </div>
     </div>
   </div>

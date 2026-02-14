@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{ editMode ? 'Edit Contact' : 'New Contact' }}
+  </div>
+
+  <div class="panel-body">
+    <div class="form-group">
+      <label>Name</label>
+      <input class="form-control" [(ngModel)]="contact.name" name="name" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input class="form-control" [(ngModel)]="contact.email" name="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Phone</label>
+      <input class="form-control" [(ngModel)]="contact.phone" name="phone" />
+    </div>
+
+    <div class="form-group">
+      <label>Image URL</label>
+      <input class="form-control" [(ngModel)]="contact.imageUrl" name="imageUrl" />
+    </div>
+
+    <button class="btn btn-success" (click)="onSave()">Save</button>
+    <button class="btn btn-default" style="margin-left: 6px;" (click)="onCancel()">Cancel</button>
+  </div>
+</div>

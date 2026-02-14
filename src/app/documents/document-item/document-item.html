@@ -1,7 +1,8 @@
-<div
+<a
   class="list-group-item"
-  style="padding: 10px; border: 1px solid #888; margin: 6px; border-radius: 6px; cursor: pointer;"
-  (click)="onSelected()"
+  style="padding: 10px; border: 1px solid #888; margin: 6px; border-radius: 6px; cursor: pointer; display: block; text-decoration: none;"
+  [routerLink]="[document.id]"
+  routerLinkActive="active"
 >
   {{ document.name }}
-</div>
+</a>

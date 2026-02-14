@@ -1,18 +1,18 @@
-<div class="panel panel-default" *ngIf="document">
+<div class="panel panel-default" *ngIf="document as doc">
   <div class="panel-heading">
-    {{ document.name }}
+    {{ doc.name }}
   </div>
 
   <div class="panel-body">
     <div class="label-value">
       <span class="label">Description:</span>
-      <span class="value">{{ document.description }}</span>
+      <span class="value">{{ doc.description }}</span>
     </div>
 
     <div class="label-value">
       <span class="label">URL:</span>
       <span class="value">
-        <a [href]="document.url" target="_blank">{{ document.url }}</a>
+        <a [href]="doc.url" target="_blank">{{ doc.url }}</a>
       </span>
     </div>
 
@@ -32,6 +32,11 @@
       </div>
     </div>
 
+    <div style="margin-bottom: 10px;">
+      <a class="btn btn-primary" (click)="onView()">View</a>
+      <a class="btn btn-info" [routerLink]="['edit']" style="margin-left: 6px;">Edit</a>
+      <a class="btn btn-danger" (click)="onDelete()" style="margin-left: 6px;">Delete</a>
+    </div>
 
   </div>
 </div>
