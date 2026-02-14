@@ -25,6 +25,19 @@ export class DocumentService {
     return null;
   }
 
+  addDocument(document: Document) {
+    this.documents.push(document);
+    this.documentChangedEvent.emit(this.documents.slice());
+  }
+
+  updateDocument(document: Document) {
+    const index = this.documents.findIndex(d => d.id === document.id);
+    if (index < 0) return;
+
+    this.documents[index] = document;
+    this.documentChangedEvent.emit(this.documents.slice());
+  }
+
   deleteDocument(document: Document) {
   if (!document) return;
 
