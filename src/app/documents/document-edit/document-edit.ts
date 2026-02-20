@@ -16,7 +16,7 @@ import { DocumentService } from '../document';
 export class DocumentEdit implements OnInit {
   editMode = false;
   id: string | null = null;
-
+  originalDocument: Document | null = null;
   document: Document = {
     id: '',
     name: '',
@@ -39,6 +39,8 @@ export class DocumentEdit implements OnInit {
       if (this.editMode && this.id) {
         const found = this.documentService.getDocument(this.id);
         if (found) {
+          this.originalDocument = found;
+
           this.document = {
             ...found,
             children: found.children ? [...found.children] : []
@@ -58,7 +60,9 @@ export class DocumentEdit implements OnInit {
 
   onSubmit(): void {
     if (this.editMode) {
-      this.documentService.updateDocument(this.document);
+      if (this.originalDocument) {
+        this.documentService.updateDocument(this.originalDocument, this.document);
+      }
     } else {
       this.documentService.addDocument(this.document);
     }

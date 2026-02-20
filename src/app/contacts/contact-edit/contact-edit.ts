@@ -15,6 +15,7 @@ import { ContactService } from '../contact';
 })
 export class ContactEdit implements OnInit {
   editMode = false;
+  originalContact: Contact | null = null;
   contact: Contact = {
     id: '',
     name: '',
@@ -40,13 +41,18 @@ export class ContactEdit implements OnInit {
 
       this.editMode = true;
       const found = this.contactService.getContact(id);
-      if (found) this.contact = { ...found };
+      if (found) {
+        this.originalContact = found;
+        this.contact = { ...found };
+      }
     });
   }
 
   onSave(): void {
     if (this.editMode) {
-      this.contactService.updateContact(this.contact);
+      if (this.originalContact) {
+        this.contactService.updateContact(this.originalContact, this.contact);
+      }
     } else {
       this.contactService.addContact(this.contact);
     }
