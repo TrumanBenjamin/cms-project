@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact';
@@ -11,19 +11,14 @@ import { ContactService } from '../contact';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './contact-edit.html',
-  styleUrls: ['./contact-edit.css']
+  styleUrls: ['./contact-edit.css'],
 })
 export class ContactEdit implements OnInit {
-  editMode = false;
   originalContact: Contact | null = null;
-  contact: Contact = {
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
-    imageUrl: '',
-    group: null as any
-  };
+  contact: Contact | null = null;
+  groupContacts: Contact[] = [];
+  editMode: boolean = false;
+  id: string | null = null;
 
   constructor(
     private contactService: ContactService,
@@ -32,35 +27,63 @@ export class ContactEdit implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (!id) {
+    this.route.params.subscribe((params: Params) => {
+      this.id = params['id'] ?? null;
+
+      if (!this.id) {
         this.editMode = false;
+        this.originalContact = null;
+        this.groupContacts = [];
+        this.contact = {
+          id: '',
+          name: '',
+          email: '',
+          phone: '',
+          imageUrl: '',
+          group: null as any,
+        };
+        return;
+      }
+
+      this.originalContact = this.contactService.getContact(this.id);
+
+      if (!this.originalContact) {
         return;
       }
 
       this.editMode = true;
-      const found = this.contactService.getContact(id);
-      if (found) {
-        this.originalContact = found;
-        this.contact = { ...found };
+      this.contact = JSON.parse(JSON.stringify(this.originalContact));
+
+      if (this.originalContact.group) {
+        this.groupContacts = JSON.parse(JSON.stringify(this.originalContact.group));
+      } else {
+        this.groupContacts = [];
       }
     });
   }
 
-  onSave(): void {
-    if (this.editMode) {
-      if (this.originalContact) {
-        this.contactService.updateContact(this.originalContact, this.contact);
-      }
+  onSubmit(form: NgForm): void {
+    const value = form.value;
+
+    const newContact: Contact = {
+      id: this.editMode && this.originalContact ? this.originalContact.id : '',
+      name: value.name,
+      email: value.email,
+      phone: value.phone,
+      imageUrl: value.imageUrl,
+      group: this.groupContacts
+    };
+
+    if (this.editMode && this.originalContact) {
+      this.contactService.updateContact(this.originalContact, newContact);
     } else {
-      this.contactService.addContact(this.contact);
+      this.contactService.addContact(newContact);
     }
 
-    this.router.navigateByUrl('/contacts');
+    this.router.navigate(['/contacts']);
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/contacts');
+    this.router.navigate(['/contacts']);
   }
 }

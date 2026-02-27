@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Document } from '../document.model';
 import { DocumentService } from '../document';
@@ -14,63 +14,70 @@ import { DocumentService } from '../document';
   styleUrls: ['./document-edit.css'],
 })
 export class DocumentEdit implements OnInit {
+  originalDocument: Document | null = null;
+  document: Document | null = null;
   editMode = false;
   id: string | null = null;
-  originalDocument: Document | null = null;
-  document: Document = {
-    id: '',
-    name: '',
-    description: '',
-    url: '',
-    children: []
-  };
 
   constructor(
-    private route: ActivatedRoute,
+    private documentService: DocumentService,
     private router: Router,
-    private documentService: DocumentService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    this.route.params.subscribe((params: Params) => {
       this.id = params['id'] ?? null;
-      this.editMode = this.id !== null;
 
-      if (this.editMode && this.id) {
-        const found = this.documentService.getDocument(this.id);
-        if (found) {
-          this.originalDocument = found;
-
-          this.document = {
-            ...found,
-            children: found.children ? [...found.children] : []
-          };
-        }
-      } else {
+      if (!this.id) {
+        this.editMode = false;
+        this.originalDocument = null;
         this.document = {
           id: '',
           name: '',
           description: '',
           url: '',
-          children: []
+          children: [],
         };
+        return;
       }
+
+      this.originalDocument = this.documentService.getDocument(this.id);
+
+      if (!this.originalDocument) {
+        return;
+      }
+
+      this.editMode = true;
+
+      this.document = JSON.parse(JSON.stringify(this.originalDocument));
     });
   }
 
-  onSubmit(): void {
-    if (this.editMode) {
-      if (this.originalDocument) {
-        this.documentService.updateDocument(this.originalDocument, this.document);
-      }
+  onSubmit(form: NgForm): void {
+    const value = form.value;
+
+    const newDocument: Document = {
+      id: this.editMode && this.originalDocument ? this.originalDocument.id : '',
+      name: value.name,
+      description: value.description,
+      url: value.url,
+      children:
+        this.editMode && this.originalDocument
+          ? this.originalDocument.children
+          : [],
+    };
+
+    if (this.editMode && this.originalDocument) {
+      this.documentService.updateDocument(this.originalDocument, newDocument);
     } else {
-      this.documentService.addDocument(this.document);
+      this.documentService.addDocument(newDocument);
     }
 
-    this.router.navigateByUrl('/documents');
+    this.router.navigate(['/documents']);
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/documents');
+    this.router.navigate(['/documents']);
   }
 }
